@@ -1,0 +1,43 @@
+---
+# override openstack_version variable from group_vars
+openstack_version: master
+
+openstack_package_prerequisites:
+  - python-pip
+  - python-virtualenv
+  - python-pymysql
+  - openssh-client
+  - rsync
+  - wget
+  - vim
+
+openstack_services:
+  - rally
+ 
+openstack_source_projects:
+  - rally-openstack
+
+service_files:
+  tasks:
+    src: tasks
+    dest: /var/lib/rally/
+
+config_files:
+  rally.conf:
+    src: rally/rally.conf.j2
+    dest: /etc/rally/rally.conf
+
+contrib_files:
+  bash_completion:
+    src: bash_completion.sh
+    dest: /etc/bash_completion.d/rally
+    mode: 0775
+
+docker_containers:
+  rally:
+    image: dockerhub.paypalcorp.com/ajanis/rally:latest
+    ports: []
+    volumes:
+      - /etc/rally:/etc/rally:ro
+      - /var/lib/rally:/var/lib/rally
+      - /var/log/rally:/var/log/rally

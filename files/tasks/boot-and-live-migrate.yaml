@@ -1,0 +1,19 @@
+---
+  NovaServers.boot_and_live_migrate_server:
+  - args:
+      flavor:
+        name: "m1.xlarge"
+      image:
+        name: "xenial"
+      block_migration: true
+    runner:
+      type: "constant"
+      times: 1
+      concurrency: 1
+    context:
+      users:
+        tenants: 1
+        users_per_tenant: 1
+    sla:
+      failure_rate:
+        max: 0

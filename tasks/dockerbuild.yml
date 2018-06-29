@@ -1,0 +1,22 @@
+---
+
+- name: install prereq packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{openstack_package_prerequisites}}"
+
+- name: Set up users and service directories
+  import_role:
+    name: openstack-common
+    tasks_from: service-setup-docker.yml
+
+- name: Install services from github source
+  import_role:
+    name: openstack-common
+    tasks_from: service-source-install.yml
+
+- name: Install service contrib files
+  import_role:
+    name: openstack-common
+    tasks_from: service-contrib.yml

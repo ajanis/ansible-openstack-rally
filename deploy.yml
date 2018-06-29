@@ -1,0 +1,7 @@
+- name: Deploy openstack rally server
+  hosts: openstack_rally
+  become: True
+  gather_facts: True
+  tasks:
+    - include_role:
+        name: openstack-rally

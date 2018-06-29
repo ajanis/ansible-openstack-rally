@@ -1,0 +1,7 @@
+- name: Build Docker image for Rally
+  hosts: localhost
+  become: True
+  tasks:
+    - include_role:
+        name: openstack-rally
+        tasks_from: dockerbuild.yml

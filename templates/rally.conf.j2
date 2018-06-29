@@ -1,0 +1,7 @@
+[DEFAULT]
+
+[database]
+
+#connection = mysql+pymysql://{{ openstack_rally_mysql_user }}:{{ openstack_rally_mysql_pass }}@{{ openstack_mysql_host }}/{{ openstack_rally_mysql_db }}
+
+connection = sqlite:////var/lib/rally/rally.sqlite

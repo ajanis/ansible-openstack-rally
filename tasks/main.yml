@@ -1,0 +1,35 @@
+---
+
+- name: Set up users and service directories
+  import_role:
+    name: openstack-common
+    tasks_from: service-setup-docker.yml
+
+- name: create /var/lib/rally/rcfiles
+  file:
+    state: directory
+    path: /var/lib/rally/rcfiles
+    mode: 0755
+
+- name: copy adminrc
+  template:
+    src: adminrc.j2
+    dest: /var/lib/rally/rcfiles/{{ item.key }}
+    owner: root
+    group: root
+  with_dict: "{{ openstack_admin_data }}"
+
+- name: Install service config files
+  import_role:
+    name: openstack-common
+    tasks_from: service-configs.yml
+
+- name: Deploy Containers
+  import_role:
+    name: openstack-common
+    tasks_from: service-containers.yml
+
+- name: create rally container
+  shell: docker run -v /etc/rally:/etc/rally:ro -v /var/lib/rally:/var/lib/rally -v /var/log/rally:/var/log/rally --name rally --workdir /opt/rally --entrypoint /opt/rally/bin/rally -d -t dockerhub.paypalinc.com/iaas/rally:latest
+  args:
+    executable: /bin/bash
